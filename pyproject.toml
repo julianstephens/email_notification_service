@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "mobile-banking-notifications"
+version = "0.1.0"
+description = ""
+authors = ["Julian Stephens <julian@julianstephens.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+lunchable = "^0.9.0"
+ruff = "^0.1.4"
+
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.334"
+mypy = "^1.6.1"
+pre-commit = "^3.5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
