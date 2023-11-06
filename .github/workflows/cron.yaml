@@ -32,5 +32,8 @@ jobs:
         run: poetry install --no-interaction --no-root
       - name: Install project
         run: poetry install --no-interaction
+      - name: Create env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
       - name: Send notification
         run: poetry run python -m mobile_banking_notifications
