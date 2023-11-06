@@ -2,7 +2,7 @@ name: Banking Notification Cron Job
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "45 19 * * *"
   workflow_dispatch:
 
 jobs:
