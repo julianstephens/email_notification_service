@@ -1,12 +1,7 @@
-"""Entry point for ."""
-
-
-from dotenv import load_dotenv
-
 from mobile_banking_notifications.lm_api import LunchMoneyAPI
-
-load_dotenv(dotenv_path="./.env.local")
+from mobile_banking_notifications.mail_client import MailClient
 
 if __name__ == "__main__":
     lm_api = LunchMoneyAPI()
-    print(lm_api.get_accounts())
+    mc = MailClient()
+    mc.send_mail(lm_api.get_accounts())
