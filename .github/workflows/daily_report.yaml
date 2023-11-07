@@ -1,4 +1,4 @@
-name: Banking Notification Cron Job
+name: Daily Spending Report
 
 on:
   schedule:
