@@ -2,8 +2,8 @@ from datetime import date, timedelta
 
 from lunchable import LunchMoney
 
-from mobile_banking_notifications.config import Config
-from mobile_banking_notifications.templates import ACCOUNT_TEMPLATE
+from email_notification_service.config import Config
+from email_notification_service.templates import ACCOUNT_TEMPLATE
 
 
 class LunchMoneyAPI:

@@ -1,1 +1,1 @@
-# mobile_banking_notifications
+# email_notification_service

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mobile-banking-notifications"
+name = "email-notification-service"
 version = "0.1.0"
 description = ""
 authors = ["Julian Stephens <julian@julianstephens.net>"]

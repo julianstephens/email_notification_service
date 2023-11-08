@@ -1,7 +1,7 @@
 import sys
 
-from mobile_banking_notifications.lm_api import LunchMoneyAPI
-from mobile_banking_notifications.mail_client import MailClient
+from email_notification_service.lm_api import LunchMoneyAPI
+from email_notification_service.mail_client import MailClient
 
 if __name__ == "__main__":
     arg = sys.argv[1] if len(sys.argv) > 1 else None

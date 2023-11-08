@@ -5,8 +5,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
 
-from mobile_banking_notifications.config import Config
-from mobile_banking_notifications.templates import (
+from email_notification_service.config import Config
+from email_notification_service.templates import (
     DAILY_EMAIL_TEMPLATE,
     TRANSACTION_TABLE_TEMPLATE,
     WEEKLY_EMAIL_TEMPLATE,
@@ -31,7 +31,7 @@ class MailClient:
             message["From"] = self._conf.MAIL_USER
             message["To"] = self._conf.MAIL_USER
 
-            f = open(f"{os.getcwd()}/mobile_banking_notifications/styles/modest.css")
+            f = open(f"{os.getcwd()}/email_notification_service/styles/modest.css")
             styles = f.read()
 
             today = date.today()
