@@ -1,17 +1,16 @@
-import os
+import json
 
 import gspread
-from gspread.auth import Path
 
 from email_notification_service.config import Config
 
 
 class GSuiteAPI:
     def __init__(self) -> None:
-        self._cred_file_path = f"{os.getcwd()}/gsuite_creds.json"
         self._conf = Config()
-        self.gc = gspread.service_account(
-            filename=Path(self._cred_file_path), scopes=self._conf.GSUITE_SCOPES
+        self._creds = json.loads(self._conf.GSUITE_CREDS)
+        self.gc = gspread.service_account_from_dict(
+            self._creds, scopes=self._conf.GSUITE_SCOPES
         )
 
     def get_worksheet(self, worksheet: int):
