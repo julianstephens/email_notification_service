@@ -36,4 +36,4 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
       - name: Send notification
-        run: poetry run python -m mobile_banking_notifications
+        run: poetry run python -m email_notification_service spending daily

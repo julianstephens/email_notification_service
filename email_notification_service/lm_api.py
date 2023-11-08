@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from lunchable import LunchMoney
 
 from email_notification_service.config import Config
-from email_notification_service.templates import ACCOUNT_TEMPLATE
+from email_notification_service.templates.spending import ACCOUNT_TEMPLATE
 
 
 class LunchMoneyAPI:
@@ -12,6 +12,7 @@ class LunchMoneyAPI:
         self._lunchable = LunchMoney(access_token=self._conf.LM_ACCESS_TOKEN)
 
     def get_accounts(self) -> str:
+        """Retrieves balance information for all Plaid accounts"""
         accounts = self._lunchable.get_plaid_accounts()
 
         res = ""
@@ -25,7 +26,12 @@ class LunchMoneyAPI:
 
         return res
 
-    def get_transactions(self, period=7) -> str:
+    def get_transactions(self, period: int = 7) -> str:
+        """Retrieves all transactions over from today - {period} through today
+
+        Args:
+            period (int): date range to filter over
+        """
         transactions = self._lunchable.get_transactions(
             start_date=date.today() - timedelta(period),
             end_date=date.today(),

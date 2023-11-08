@@ -6,11 +6,8 @@ from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
 
 from email_notification_service.config import Config
-from email_notification_service.templates import (
-    DAILY_EMAIL_TEMPLATE,
-    TRANSACTION_TABLE_TEMPLATE,
-    WEEKLY_EMAIL_TEMPLATE,
-)
+from email_notification_service.templates import spending
+from email_notification_service.templates.base import BASE_EMAIL
 
 
 class MailClient:
@@ -18,40 +15,47 @@ class MailClient:
         self._context = ssl.create_default_context()
         self._conf = Config()
 
-    def send_mail(self, data: str, transaction_mode=False):
+    def _send_email(self, subject: str, body: str):
         with SMTP_SSL(
             host=self._conf.MAIL_HOST, port=self._conf.MAIL_PORT, context=self._context
         ) as server:
             server.login(self._conf.MAIL_USER, self._conf.MAIL_PASSWORD)
 
             message = MIMEMultipart("alternative")
-            message[
-                "Subject"
-            ] = f"{'Weekly' if transaction_mode else 'Daily'} Finance Report"
+            message["Subject"] = subject
             message["From"] = self._conf.MAIL_USER
             message["To"] = self._conf.MAIL_USER
 
             f = open(f"{os.getcwd()}/email_notification_service/styles/modest.css")
             styles = f.read()
 
-            today = date.today()
-            format = "%a %b %d %Y"
-
-            body = (
-                WEEKLY_EMAIL_TEMPLATE.format(
-                    styles=styles,
-                    dateRange=f"{(today - timedelta(7)).strftime(format)} through {today.strftime(format)}",
-                    data=TRANSACTION_TABLE_TEMPLATE.format(data=data),
-                )
-                if transaction_mode
-                else DAILY_EMAIL_TEMPLATE.format(
-                    styles=styles,
-                    date=today.strftime(format),
-                    data=data,
-                )
+            message.attach(
+                MIMEText(BASE_EMAIL.format(styles=styles, body=body), "html")
             )
-            message.attach(MIMEText(body, "html"))
 
             server.sendmail(
                 self._conf.MAIL_USER, self._conf.MAIL_USER, message.as_string()
             )
+
+    def send_bank_report(self, data: str, transaction_mode=False):
+        today = date.today()
+        format = "%a %b %d %Y"
+
+        body = (
+            spending.WEEKLY_EMAIL.format(
+                dateRange=f"{(today - timedelta(7)).strftime(format)} through {today.strftime(format)}",
+                data=spending.TRANSACTION_TABLE.format(data=data),
+            )
+            if transaction_mode
+            else spending.DAILY_EMAIL.format(
+                date=today.strftime(format),
+                data=data,
+            )
+        )
+
+        self._send_email(
+            f"{'Weekly' if transaction_mode else 'Daily'} Finance Report", body
+        )
+
+    def send_climbing_routine(self):
+        pass
