@@ -40,7 +40,7 @@ class MailClient:
             body = (
                 WEEKLY_EMAIL_TEMPLATE.format(
                     styles=styles,
-                    dateRange=f"{(today - timedelta(7)).strftime(format)} through {(today + timedelta(7)).strftime(format)}",
+                    dateRange=f"{(today - timedelta(7)).strftime(format)} through {today.strftime(format)}",
                     data=TRANSACTION_TABLE_TEMPLATE.format(data=data),
                 )
                 if transaction_mode
