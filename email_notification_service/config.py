@@ -16,6 +16,10 @@ class Config:
 
     MAIL_PORT: int = int(os.environ.get("MAIL_PORT") or "-1")
 
+    GSUITE_SCOPES: list[str] = [os.environ.get("GSUITE_SCOPE") or ""]
+
+    CLIMBING_SHEET_ID: str = os.environ.get("CLIMBING_SHEET_ID") or ""
+
     def __init__(self):
         var_arr = vars(self.__class__)
         members = [

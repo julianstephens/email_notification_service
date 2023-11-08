@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
 
 from email_notification_service.config import Config
+from email_notification_service.gsuite import GSuiteAPI
 from email_notification_service.templates import spending
 from email_notification_service.templates.base import BASE_EMAIL
 
@@ -14,6 +15,7 @@ class MailClient:
     def __init__(self) -> None:
         self._context = ssl.create_default_context()
         self._conf = Config()
+        self._gs = GSuiteAPI()
 
     def _send_email(self, subject: str, body: str):
         with SMTP_SSL(
@@ -57,5 +59,5 @@ class MailClient:
             f"{'Weekly' if transaction_mode else 'Daily'} Finance Report", body
         )
 
-    def send_climbing_routine(self):
-        pass
+    def send_climbing_routine(self, data: str):
+        self._send_email("Today's Workout", data)

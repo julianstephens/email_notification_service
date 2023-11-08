@@ -134,3 +134,5 @@ dmypy.json
 .null-ls*
 .vercel
 .env*.local
+
+gsuite_creds.json
