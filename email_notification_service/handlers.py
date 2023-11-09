@@ -23,7 +23,7 @@ class Handlers:
     def climbing(self):
         data = self._gs_api.read_cell(7, datetime.now().weekday())
         if not data:
-            data = "Rest day"
+            return
 
         split = [line.split("(") for line in data.split("\n")]
         data = [
