@@ -2,13 +2,12 @@ import os
 
 from gspread.auth import READONLY_SCOPES, Path, service_account
 
-from email_notification_service.config import Config
-from email_notification_service.logger import logger
+import email_notification_service.utils as utils
 
 
 class GSuiteAPI:
     def __init__(self) -> None:
-        self._conf = Config()
+        self._conf = utils.Config()
         self._path = os.path.join(os.getcwd(), "creds.json")
 
         if not os.path.isfile(self._path):
@@ -28,8 +27,5 @@ class GSuiteAPI:
         return ws.row_values(row)
 
     def read_cell(self, row: int, col: int, worksheet=0):
-        logger.info(f"attempting to read from workbook: {(row, col, worksheet)}")
         ws = self._get_worksheet(worksheet)
-        if ws:
-            logger.info(f"got ws: {ws}")
         return ws.cell(row, col).value

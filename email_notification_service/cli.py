@@ -1,7 +1,7 @@
 import typer
 from typing_extensions import Annotated
 
-from email_notification_service.config import Config
+import email_notification_service.utils as utils
 from email_notification_service.handlers import Handlers
 
 app = typer.Typer(no_args_is_help=True)
@@ -33,7 +33,7 @@ def main(
         typer.Option(
             "--quiet",
             "-q",
-            callback=Config.toggle_quiet_mode,
+            callback=utils.Config.toggle_quiet_mode,
             help="Don't send email",
         ),
     ] = False,

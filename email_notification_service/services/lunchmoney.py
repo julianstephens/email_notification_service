@@ -2,14 +2,16 @@ from datetime import date, timedelta
 
 from lunchable import LunchMoney
 
-from email_notification_service.config import Config
-from email_notification_service.templates.spending import ACCOUNT_TEMPLATE
+from email_notification_service.utils.config import Config
+
+from .template_manager import TemplateManager
 
 
 class LunchMoneyAPI:
     def __init__(self) -> None:
         self._conf = Config()
         self._lunchable = LunchMoney(access_token=self._conf.LM_ACCESS_TOKEN)
+        self._manager = TemplateManager()
 
     def get_accounts(self) -> str:
         """Retrieves balance information for all Plaid accounts"""
@@ -18,7 +20,8 @@ class LunchMoneyAPI:
         res = ""
         for a in accounts:
             acct = a.dict()
-            res += ACCOUNT_TEMPLATE.format(
+            res += self._manager.render_template(
+                "account.html",
                 name=acct["name"],
                 balance=acct["balance"],
                 updated=acct["balance_last_update"].strftime("%c"),

@@ -5,10 +5,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
 
-from email_notification_service.config import Config
-from email_notification_service.gsuite import GSuiteAPI
-from email_notification_service.templates import spending
-from email_notification_service.templates.base import BASE_EMAIL
+from email_notification_service import utils
+from email_notification_service.services.gsuite import GSuiteAPI
+from email_notification_service.services.template_manager import TemplateManager
+from email_notification_service.utils.config import Config
 
 
 class MailClient:
@@ -16,6 +16,7 @@ class MailClient:
         self._context = ssl.create_default_context()
         self._conf = Config()
         self._gs = GSuiteAPI()
+        self._manager = TemplateManager()
 
     def _send_email(self, subject: str, body: str):
         with SMTP_SSL(
@@ -31,10 +32,11 @@ class MailClient:
             f = open(f"{os.getcwd()}/email_notification_service/styles/modest.css")
             styles = f.read()
 
-            message.attach(
-                MIMEText(BASE_EMAIL.format(styles=styles, body=body), "html")
-            )
+            html = self._manager.render_template("base.html", styles=styles, body=body)
 
+            message.attach(MIMEText(html, "html"))
+
+            utils.logger.info("Email sent. Complete!")
             server.sendmail(
                 self._conf.MAIL_USER, self._conf.MAIL_USER, message.as_string()
             )
@@ -44,12 +46,14 @@ class MailClient:
         format = "%a %b %d %Y"
 
         body = (
-            spending.WEEKLY_EMAIL.format(
+            self._manager.render_template(
+                "weekly_spending.html",
                 dateRange=f"{(today - timedelta(7)).strftime(format)} through {today.strftime(format)}",
-                data=spending.TRANSACTION_TABLE.format(data=data),
+                data=self._manager.render_template("transaction_table.html", data=data),
             )
             if transaction_mode
-            else spending.DAILY_EMAIL.format(
+            else self._manager.render_template(
+                "daily_spending.html",
                 date=today.strftime(format),
                 data=data,
             )
@@ -60,4 +64,5 @@ class MailClient:
         )
 
     def send_climbing_routine(self, data: str):
+        print("email", data)
         self._send_email("Today's Workout", data)
