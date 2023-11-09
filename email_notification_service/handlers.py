@@ -23,7 +23,7 @@ class Handlers:
     def climbing(self):
         data = self._gs_api.read_cell(7, datetime.now().weekday())
         if not data:
-            raise AttributeError("Error: unable to read from Sheets")
+            data = "Rest day"
 
         split = [line.split("(") for line in data.split("\n")]
         data = [
