@@ -14,7 +14,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9.18'
+          python-version: '3.10'
       - name: Install poetry
         uses: snok/install-poetry@v1
         with:
@@ -33,7 +33,14 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
       - name: Create env file
+        env:
+          ENV: ${{ secrets.ENV_FILE }}
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
+          echo $ENV > .env
+      - name: Copy GSUITE env
+        env:
+          GSUITE: ${{ secrets.GSUITE_CREDS_JSON }}
+        run: |
+          echo $GSUITE > creds.json
       - name: Send notification
         run: poetry run python -m email_notification_service climbing

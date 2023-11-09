@@ -1,6 +1,7 @@
-import json
+import os
 
 import gspread
+from gspread.auth import Path
 
 from email_notification_service.config import Config
 
@@ -8,13 +9,12 @@ from email_notification_service.config import Config
 class GSuiteAPI:
     def __init__(self) -> None:
         self._conf = Config()
-        self._creds = json.loads(self._conf.GSUITE_CREDS)
-        self.gc = gspread.service_account_from_dict(
-            self._creds, scopes=self._conf.GSUITE_SCOPES
+        self._gc = gspread.service_account(
+            Path(f"{os.getcwd()}/creds.json"), scopes=self._conf.GSUITE_SCOPES
         )
 
     def get_worksheet(self, worksheet: int):
-        sh = self.gc.open_by_key(self._conf.CLIMBING_SHEET_ID)
+        sh = self._gc.open_by_key(self._conf.CLIMBING_SHEET_ID)
         return sh.get_worksheet(worksheet)
 
     def read_row(self, row: int, worksheet: int = 0):

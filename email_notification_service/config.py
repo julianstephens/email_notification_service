@@ -20,8 +20,6 @@ class Config:
 
     CLIMBING_SHEET_ID: str = os.environ.get("CLIMBING_SHEET_ID") or ""
 
-    GSUITE_CREDS: str = os.environ.get("GSUITE_CREDS") or ""
-
     def __init__(self):
         var_arr = vars(self.__class__)
         members = [
