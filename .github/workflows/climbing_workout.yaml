@@ -33,14 +33,10 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
       - name: Create env file
-        env:
-          ENV: ${{ secrets.ENV_FILE }}
         run: |
-          echo $ENV > .env
+          echo "${{ secrets.ENV_FILE }}" > .env
       - name: Copy GSUITE env
-        env:
-          GSUITE: ${{ secrets.GSUITE_CREDS_JSON }}
         run: |
-          echo $GSUITE > creds.json
+          echo "${{ secrets.GSUITE_CREDS_JSON }}" > creds.json
       - name: Send notification
         run: poetry run python -m email_notification_service climbing
