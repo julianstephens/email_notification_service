@@ -28,4 +28,6 @@ class GSuiteAPI:
 
     def read_cell(self, row: int, col: int, worksheet: int = 0):
         ws = self.get_worksheet(worksheet)
+        if ws:
+            print("got ws", ws)
         return ws.cell(row, col).value

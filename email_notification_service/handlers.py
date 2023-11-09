@@ -19,10 +19,11 @@ class Handlers:
         self._mc.send_bank_report(self._lm_api.get_transactions(), True)
 
     def climbing(self):
-        lines = self._gs_api.read_cell(7, datetime.now().weekday()).split("\n")
-        if not lines:
-            raise ValueError("Error: unable to read from Sheets")
-        split = [line.split("(") for line in lines]
+        data = self._gs_api.read_cell(7, datetime.now().weekday())
+        if not data:
+            raise AttributeError("Error: unable to read from Sheets")
+
+        split = [line.split("(") for line in data.split("\n")]
         data = [
             "<tr><td>{activity}</td><td>{time}</td></tr>\n".format(
                 activity=s[0].strip(), time=s[1][:-1]

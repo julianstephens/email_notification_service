@@ -30,4 +30,4 @@ class Config:
 
         for m in members:
             if not var_arr[m] or var_arr[m] == -1:
-                raise ValueError(f"Env var '{m}' is not set")
+                raise AttributeError(f"Env var '{m}' is not set")
