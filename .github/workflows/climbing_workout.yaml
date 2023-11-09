@@ -41,6 +41,6 @@ jobs:
         env:
           GSUITE: ${{ secrets.GSUITE_CREDS_JSON }}
         run: |
-          echo "$GSUITE" | base64 --decode | jq > creds.json
+          echo "$GSUITE" | base64 | base64 --decode | jq > creds.json
       - name: Send notification
         run: poetry run python -m email_notification_service climbing
