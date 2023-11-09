@@ -28,8 +28,8 @@ class GSuiteAPI:
         return ws.row_values(row)
 
     def read_cell(self, row: int, col: int, worksheet=0):
-        logger.info("attempting to read from workbook", row, col, worksheet)
+        logger.info(f"attempting to read from workbook: {(row, col, worksheet)}")
         ws = self._get_worksheet(worksheet)
         if ws:
-            logger.info("got ws", ws)
+            logger.info(f"got ws: {ws}")
         return ws.cell(row, col).value

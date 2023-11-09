@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from email_notification_service.gsuite import GSuiteAPI
@@ -11,6 +12,7 @@ class Handlers:
         self._lm_api = LunchMoneyAPI()
         self._gs_api = GSuiteAPI()
         self._mc = MailClient()
+        self.quiet_mode = bool(os.environ.get("QUIET_MODE") or "False")
 
     def spending_daily(self):
         self._mc.send_bank_report(self._lm_api.get_accounts())
@@ -30,4 +32,5 @@ class Handlers:
             )
             for s in split
         ]
-        self._mc.send_climbing_routine(CLIMBING_EMAIL.format(data="".join(data)))
+        if not self.quiet_mode:
+            self._mc.send_climbing_routine(CLIMBING_EMAIL.format(data="".join(data)))

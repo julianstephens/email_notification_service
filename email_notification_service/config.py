@@ -30,4 +30,9 @@ class Config:
 
         for m in members:
             if not var_arr[m] or var_arr[m] == -1:
-                raise AttributeError(f"Env var '{m}' is not set")
+                if m != "QUIET_MODE":
+                    raise AttributeError(f"Env var '{m}' is not set")
+
+    @staticmethod
+    def toggle_quiet_mode():
+        os.environ.setdefault("QUIET_MODE", "True")
