@@ -20,6 +20,8 @@ class Handlers:
 
     def climbing(self):
         lines = self._gs_api.read_cell(7, datetime.now().weekday()).split("\n")
+        if not lines:
+            raise ValueError("Error: unable to read from Sheets")
         split = [line.split("(") for line in lines]
         data = [
             "<tr><td>{activity}</td><td>{time}</td></tr>\n".format(

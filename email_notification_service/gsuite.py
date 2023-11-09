@@ -1,7 +1,6 @@
 import os
 
-import gspread
-from gspread.auth import Path
+from gspread.auth import READONLY_SCOPES, Path, service_account
 
 from email_notification_service.config import Config
 
@@ -9,8 +8,14 @@ from email_notification_service.config import Config
 class GSuiteAPI:
     def __init__(self) -> None:
         self._conf = Config()
-        self._gc = gspread.service_account(
-            Path(f"{os.getcwd()}/creds.json"), scopes=self._conf.GSUITE_SCOPES
+        self._path = os.path.join(os.getcwd(), "creds.json")
+
+        if not os.path.isfile(self._path):
+            raise AttributeError("Error: gsuite credentials file does not exist")
+
+        self._gc = service_account(
+            filename=Path(self._path),
+            scopes=READONLY_SCOPES,
         )
 
     def get_worksheet(self, worksheet: int):
