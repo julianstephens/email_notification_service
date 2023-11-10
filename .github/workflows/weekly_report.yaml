@@ -35,5 +35,10 @@ jobs:
       - name: Create env file
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
+      - name: Copy GSUITE env
+        env:
+          GSUITE: ${{ secrets.GSUITE_CREDS_JSON }}
+        run: |
+          echo "$GSUITE" | base64 | base64 --decode | jq > creds.json
       - name: Send notification
         run: poetry run python -m email_notification_service spending weekly
